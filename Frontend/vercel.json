@@ -1,0 +1,8 @@
+{
+    "rewritest":[
+        {
+            "source":"/(.*)",
+            "destination":"/"
+        }
+    ]
+}
