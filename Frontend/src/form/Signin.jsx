@@ -32,7 +32,7 @@ const Signin = () => {
       navigate("/Home");
       try {
         const response = await axios.post(
-          "https:/login-uo0t.onrender.com/auth/signin",
+          "https://login-uo0t.onrender.com/auth/signin",
           formData
         );
         console.log("Response from Backend", response.data);
