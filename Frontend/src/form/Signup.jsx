@@ -41,7 +41,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post(
-        "https://login-uo0t.onrender.com//auth/signup",
+        "https:/login-uo0t.onrender.com/auth/signup",
         formData
       );
       console.log("✅ Backend Response:", response.data);
@@ -51,7 +51,7 @@ const Signup = () => {
     } catch (err) {
       console.error(
         "❌ Server Response Error:",
-        err.response ? err.response.data : err.message
+        // err.response ? err.response.data : err.message
       );
     }
   };
