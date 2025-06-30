@@ -59,4 +59,7 @@ app.use('/auth',authRouter)//routing to authRouter
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  app.listen('/', () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 });
