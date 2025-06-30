@@ -11,8 +11,22 @@ connectDB();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));//allow data to frontend
-app.use(express.json());  // To parse JSON bodies
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://login-chi-sand.vercel.app'  //  Vercel frontend
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+ // To parse JSON bodies
 
 // signup route
 // app.post('/signup', async (req, res) => {
@@ -59,7 +73,4 @@ app.use('/auth',authRouter)//routing to authRouter
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  app.listen('/', () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
 });
