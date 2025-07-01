@@ -58,11 +58,12 @@ const Signin = () => {
     }
   };
   return (
-    <div className="border border-black font-bold shadow-lg mt-10 w-100  h-100 p-6 rounded-2xl flex flex-col justify-center items-center ml-100 bg-black-100">
-      <h1 className="font-opensans">Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <strong>Email</strong>
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+    <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
+      <h1 className="text-2xl font-bold text-center mb-4 font-opensans">Login</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block mb-1 font-semibold">Email</label>
           <input
             type="email"
             name="email"
@@ -70,14 +71,14 @@ const Signin = () => {
             onChange={handlechange}
             placeholder="Enter Your Email"
             autoComplete="off"
-            className="border border-black rounded-1xl flex"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
-        </label>
-        {errors.email && (
-          <span className="text-red-500 text-sm">{errors.email}</span>
-        )}
-        <label>
-          <strong>Password</strong>
+          {errors.email && (
+            <span className="text-red-500 text-sm">{errors.email}</span>
+          )}
+        </div>
+        <div>
+          <label className="block mb-1 font-semibold">Password</label>
           <input
             type="password"
             name="password"
@@ -85,31 +86,31 @@ const Signin = () => {
             value={formData.password}
             onChange={handlechange}
             autoComplete="off"
-            className="border border-black rounded-1xl flex"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
           />
-        </label>
-        {errors.password && (
-          <span className="text-red-500 text-sm">{errors.password}</span>
-        )}
-        <div>
-          {/* <a href="/signup">Don't have an account?</a> */}
-          <Link to="/signup">Don't have an account?</Link>
+          {errors.password && (
+            <span className="text-red-500 text-sm">{errors.password}</span>
+          )}
         </div>
-        <div>
-          <Link to="/fotgotpassword"></Link>
-            <span className="text-blue-500">Forgot Password?</span>
+        <div className="flex justify-between text-sm">
+          <Link to="/signup" className="text-blue-500 hover:underline">
+            Don't have an account?
+          </Link>
+          <Link to="/forgotpassword" className="text-blue-500 hover:underline">
+            Forgot Password?
+          </Link>
         </div>
         <div>
           <button
             type="submit"
-            className="bg-blue-800 border border-black rounded-2xl w-40 p-3 mt-4"
+            className="w-full bg-blue-800 text-white py-2 rounded-xl hover:bg-blue-700"
           >
-            Register
+            Login
           </button>
         </div>
-      
       </form>
     </div>
+  </div>
   );
 };
 
