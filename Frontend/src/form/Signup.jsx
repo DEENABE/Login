@@ -59,76 +59,77 @@ const Signup = () => {
 
 
   return (
-    <div className="border border-black font-bold shadow-lg mt-10 w-100  h-100 p-6 rounded-2xl flex flex-col 
-    justify-center items-center ml-100 bg-black-100 min-h-screen">
-      <h1 className="font-bold text-[30px] items-center mb-4">Register</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          <strong>Name</strong>
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+    <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
+      <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block mb-1 font-semibold">Name</label>
           <input
             type="text"
             name="name"
             placeholder="Enter Your Name"
             autoComplete="off"
-            className="border border-gray-300 rounded-1xl flex"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
             value={formData.name}
             onChange={handlechange}
           />
           {errors.name && (
             <span className="text-red-500 text-sm">{errors.name}</span>
           )}
-        </label>
-        <label>
-          <strong>Email</strong>
+        </div>
+        <div>
+          <label className="block mb-1 font-semibold">Email</label>
           <input
             type="email"
             name="email"
             placeholder="Enter Your Email"
             autoComplete="off"
-            className="border border-gray-300 rounded-1xl flex"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
             value={formData.email}
             onChange={handlechange}
           />
           {errors.email && (
             <span className="text-red-500 text-sm">{errors.email}</span>
           )}
-        </label>
-        <label>
-          <strong>Password</strong>
+        </div>
+        <div>
+          <label className="block mb-1 font-semibold">Password</label>
           <input
             type="password"
             name="password"
             placeholder="Enter Your Password"
             autoComplete="off"
-            className="border border-gray-300 rounded-1xl flex"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
             value={formData.password}
             onChange={handlechange}
           />
           {errors.password && (
             <span className="text-red-500 text-sm">{errors.password}</span>
           )}
-        </label>
-        <button
-          type="submit"
-          className="bg-blue-600 flex shadow-amber-100 rounded-2xl"
-        >
-          Register
-        </button>
-        <p>
-          <a href="/forgotpassword">Forgot Password?</a>
-        </p>
-        <p>
-          Already have an account?
-          <Link
-            to="/Signin"
-            className="flex justify-center rounded-3xl bg-amber-500 w-70 font-bold"
+        </div>
+        <div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-xl hover:bg-blue-700"
           >
-            Login
+            Register
+          </button>
+        </div>
+        <div className="text-sm flex justify-between">
+          <Link to="/forgotpassword" className="text-blue-500 hover:underline">
+            Forgot Password?
           </Link>
-        </p>
-       
+          <span>
+            Already have an account?{" "}
+            <Link to="/signin" className="text-amber-600 font-bold hover:underline">
+              Login
+            </Link>
+          </span>
+        </div>
       </form>
     </div>
+  </div>
   );
 };
 
