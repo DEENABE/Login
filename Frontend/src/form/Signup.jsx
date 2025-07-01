@@ -59,7 +59,8 @@ const Signup = () => {
 
 
   return (
-    <div className="border border-black font-bold shadow-lg mt-10 w-100  h-100 p-6 rounded-2xl flex flex-col justify-center items-center ml-100 bg-black-100">
+    <div className="border border-black font-bold shadow-lg mt-10 w-100  h-100 p-6 rounded-2xl flex flex-col 
+    justify-center items-center ml-100 bg-black-100 min-h-screen">
       <h1 className="font-bold text-[30px] items-center mb-4">Register</h1>
       <form onSubmit={handleSubmit}>
         <label>
