@@ -15,12 +15,15 @@ const Home = () => {
   const handlechangeicon = () => {
     navigate("/signup");
   }
+  const handlereload = () => {
+    navigate("/");
+  }
  
   return (
  <div className="relative w-full h-full">
       {/* 🔴 Top Bar */}
       <div>
-        <img src={fitlogo} alt="Fitness Logo" className="w-15 h-20 absolute top-4 -ml-2 rounded-2xl pb-10" />
+        <img src={fitlogo} alt="Fitness Logo" className="w-15 h-20 absolute top-4 -ml-2 rounded-2xl pb-10" onClick={handlereload} />
       </div>
       <div className="bg-gray-800 text-red-500 flex justify-between md:text-4xl p-4 text-5xl font-bold ">
         <div className="pl-10">MyFitness</div>
