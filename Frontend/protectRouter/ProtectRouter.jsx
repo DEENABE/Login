@@ -3,6 +3,6 @@ import { Navigate } from 'react-router-dom'
 
 const ProtectRouter = ({ children }) => {
     const token = localStorage.getItem('token')
-    return token ? children : <Navigate to="/signin" />
+    return token ? children : <Navigate to="/" />
 }
 export default ProtectRouter

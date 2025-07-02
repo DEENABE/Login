@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import DeleteUser from "../../Components/DeleteUser";
 
 
 
@@ -11,11 +10,13 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
+    number: "",
   });
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     password: "",
+    number: "",
   });
   const navigate = useNavigate();
   const handlechange = (e) => {
@@ -25,6 +26,7 @@ const Signup = () => {
   const validate = () => {
     let error = {};
     if (!formData.name) error.name = "Name is required";
+    if (!formData.number) error.number = "Number is required";
     if (!formData.email) error.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       error.email = "Invalid email format";
@@ -59,7 +61,7 @@ const Signup = () => {
 
 
   return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 bg-black">
+      <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 ">
     <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
       <h1 className="text-2xl font-bold text-center mb-6">Register</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -77,7 +79,19 @@ const Signup = () => {
           {errors.name && (
             <span className="text-red-500 text-sm">{errors.name}</span>
           )}
-        </div>
+        
+
+    
+          <label className="block mb-1 font-semibold">Number</label>
+        <input
+            type="number"
+            name="number"
+            placeholder="Enter Your Number" 
+            autoComplete="off"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            value={formData.number}
+            onChange={handlechange}/>
+            </div>
         <div>
           <label className="block mb-1 font-semibold">Email</label>
           <input
@@ -108,6 +122,7 @@ const Signup = () => {
             <span className="text-red-500 text-sm">{errors.password}</span>
           )}
         </div>
+        
         <div>
           <button
             type="submit"
