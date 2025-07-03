@@ -6,7 +6,7 @@ const  bcrypt = require('bcryptjs');
 
 const signup=async(req,res)=>{
     console.log("Received Data", req.body);
-    if (!req.body.name || !req.body.email || !req.body.password) {
+    if (!req.body.name || !req.body.name || !req.body.email || !req.body.password) {
         return res.status(400).json({ error: 'All Fields are Requried' });
     }
     try{
@@ -15,6 +15,7 @@ const signup=async(req,res)=>{
 
       const newUser=await UserModel.create({
         name:req.body.name,
+        number:req.body.number,
         email:req.body.email,
         password:hashedPassword
       });
