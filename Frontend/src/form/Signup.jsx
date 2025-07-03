@@ -52,7 +52,7 @@ const Signup = () => {
       alert("Registration successful! Please log in."); 
     } catch (err) {
      console.log("❌ Error in Registration:", err);
-     res,status(400).json({ error: 'Internel server error',details: err.message });
+     res.status(400).json({ error: 'Internel server error',details: err.message });
      
     }
   };
