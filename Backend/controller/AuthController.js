@@ -6,7 +6,7 @@ const  bcrypt = require('bcryptjs');
 
 const signup=async(req,res)=>{
     console.log("Received Data", req.body);
-    if (!req.body.name || !req.body.name || !req.body.email || !req.body.password) {
+    if (!req.body.name || !req.body.number || !req.body.email || !req.body.password) {
         return res.status(400).json({ error: 'All Fields are Requried' });
     }
     try{

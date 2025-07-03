@@ -79,9 +79,6 @@ const Signup = () => {
           {errors.name && (
             <span className="text-red-500 text-sm">{errors.name}</span>
           )}
-        
-
-    
           <label className="block mb-1 font-semibold">Number</label>
         <input
             type="number"
