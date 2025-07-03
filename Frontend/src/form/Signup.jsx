@@ -51,10 +51,9 @@ const Signup = () => {
       navigate("/signin");
       alert("Registration successful! Please log in."); 
     } catch (err) {
-      console.error(
-        "❌ Server Response Error:",
-        // err.response ? err.response.data : err.message
-      );
+     console.log("❌ Error in Registration:", err);
+     res,status(400).json({ error: 'Internel server error',details: err.message });
+     
     }
   };
 
