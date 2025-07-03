@@ -29,7 +29,7 @@ const Signin = () => {
     if (validate()) {
       console.log("Application Submitted", formData);
       setFormData({ email: "", password: "" });
-      navigate("/Home");
+      navigate("/");
       try {
         const response = await axios.post(
           "https://login-uo0t.onrender.com/auth/signin",
