@@ -8,13 +8,13 @@ const Signup = () => {
     name: "",
     email: "",
     password: "",
-    number: "",
+    number: number.toString(),
   });
   const [errors, setErrors] = useState({
     name: "",
     email: "",
     password: "",
-    number: "",
+    number:number.toString(),
   });
   const navigate = useNavigate();
   const handlechange = (e) => {
