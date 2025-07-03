@@ -47,7 +47,7 @@ const Signup = () => {
         formData
       );
       console.log("✅ Backend Response:", response.data);
-      setFormData({ name: "", email: "", password: "" });
+      setFormData({ name: "", email: "", password: "" , number: "" });
       navigate("/signin");
       alert("Registration successful! Please log in."); 
     } catch (err) {
