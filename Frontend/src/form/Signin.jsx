@@ -37,7 +37,7 @@ const Signin = () => {
       setStep(2); // move to OTP step
       setServerMsg(response.data.msg || "OTP Sent");
     } catch (err) {
-      if (err.response?.status === 404) {
+      if (err.res?.status === 404) {
         setServerMsg("User not found");
         navigate("/signup");
       } else if (err.response?.status === 401) {
@@ -65,7 +65,7 @@ const Signin = () => {
       localStorage.setItem("token", token); // Store token if needed
       navigate("/dashboard"); // or redirect to home
     } catch (err) {
-      setServerMsg(err.response?.data?.error || "OTP verification failed");
+      setServerMsg(err.res?.data?.error || "OTP verification failed");
     }
   };
 
