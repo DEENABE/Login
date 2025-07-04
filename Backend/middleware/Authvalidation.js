@@ -25,4 +25,5 @@ const siginValidation = (req, res, next) => {
   next();
 };
 
+
 module.exports = { signupValidation, siginValidation };
