@@ -1,88 +1,76 @@
 import axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signin = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
-   const [step, setStep] = useState(1); // 1 = login form, 2 = OTP form
+  const [formData, setFormData] = useState({ email: "", password: "", otp: "" });
+  const [errors, setErrors] = useState({});
+  const [step, setStep] = useState(1); // 1 = login form, 2 = OTP form
   const [userId, setUserId] = useState("");
   const [serverMsg, setServerMsg] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handlechange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   const validate = () => {
-    let error = {};
+    const error = {};
     if (!formData.email) error.email = "Email is required";
     if (!formData.password) error.password = "Password is required";
     setErrors(error);
-    return Object.keys(error).length == 0;
+    return Object.keys(error).length === 0;
   };
-  setUserId(response.data.userId);
+
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    try {
+      const response = await axios.post(
+        "https://login-uo0t.onrender.com/auth/signin",
+        { email: formData.email, password: formData.password }
+      );
+
+      setUserId(response.data.userId);
       setStep(2); // move to OTP step
       setServerMsg(response.data.msg || "OTP Sent");
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (validate()) {
-      console.log("Application Submitted", formData);
-      setFormData({ email: "", password: "" });
-      navigate("/");
-      try {
-        const response = await axios.post(
-          "https://login-uo0t.onrender.com/auth/signin",
-          formData
-        );
-        console.log("Response from Backend", response.data);
-      } catch (err) {
-        if (err.response) {
-          if (err.response.status === 404) {
-            console.log("User Not Found", err.response.status)    
-            navigate("/signup");
-          } else if (err.response.status === 401) {
-            console.log("Invalid Password", err.response.status);
-            setErrors({ password: "Invalid Password" });
-            navigate("/ForgotPassword");
-            
-          } else if (err.response.status === 200) {
-            console.log("user Not Found", err.response.status);
-          } else if (err.response.status === 400) {
-            console.log("Unable to find user", err.response.status);
-          }
-        } else {
-          console.log("Server Error", err.message);
-        }
-        
+    } catch (err) {
+      if (err.response?.status === 404) {
+        setServerMsg("User not found");
+        navigate("/signup");
+      } else if (err.response?.status === 401) {
+        setErrors({ password: "Invalid Password" });
+        setServerMsg("Invalid credentials");
+        navigate("/forgotpassword");
+      } else {
+        setServerMsg("Server Error: " + err.message);
       }
-      const handleOtpSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          const response = await axios.post(
-            "https://login-uo0t.onrender.com/auth/verifyotp",
-            { userId, otp: formData.otp }
-          );
-          console.log("OTP Verified", response.data);
-          setServerMsg(response.data.msg || "OTP Verified Successfully");
-          navigate("/"); // Redirect to dashboard or home page
-        } catch (err) {
-          console.error("OTP Verification Failed", err.response.data);
-          setServerMsg(err.response.data.error || "OTP Verification Failed");
-        }
     }
   };
-}
+
+  const handleOtpSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.otp) return setErrors({ otp: "OTP is required" });
+
+    try {
+      const response = await axios.post(
+        "https://login-uo0t.onrender.com/auth/verify-otp",
+        { userId, otp: formData.otp }
+      );
+      const { token } = response.data;
+
+      setServerMsg("✅ OTP Verified, Login Successful!");
+      localStorage.setItem("token", token); // Store token if needed
+      navigate("/dashboard"); // or redirect to home
+    } catch (err) {
+      setServerMsg(err.response?.data?.error || "OTP verification failed");
+    }
+  };
+
   return (
-     <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
+    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4">
       <div className="w-full max-w-md bg-white p-6 rounded-2xl shadow-lg">
         <h1 className="text-2xl font-bold text-center mb-4 font-opensans">
           {step === 1 ? "Login" : "Enter OTP"}
