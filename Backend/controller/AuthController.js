@@ -70,9 +70,9 @@ const signin=async(req,res)=>{
           from: process.env.EMAIL,
           to: user.email,
           subject: 'OTP for Login',
-          text: `<h1>Your OTP is <h2>${otp}</h2>. It is valid for 5 minutes.</h1>`,
+          text: <h1>`Your OTP is <h2>${otp}</h2>. It is valid for 5 minutes.`</h1>,
         });
-        res.status(200).json({msg:'OTP sent to your email',userId:user._id});
+        res.status(300).json({msg:'OTP sent to your email',userId:user._id});
       
    
 
