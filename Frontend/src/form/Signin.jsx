@@ -43,7 +43,7 @@ const Signin = () => {
       } else if (err.response?.status === 401) {
         setErrors({ password: "Invalid Password" });
         setServerMsg("Invalid credentials");
-        navigate("/forgotpassword");
+        navigate("");
       } else {
         setServerMsg("Server Error: " + err.message);
       }
