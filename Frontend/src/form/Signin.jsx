@@ -63,7 +63,7 @@ const Signin = () => {
 
       setServerMsg("✅ OTP Verified, Login Successful!");
       localStorage.setItem("token", token); // Store token if needed
-      navigate("/dashboard"); // or redirect to home
+      navigate("/"); // or redirect to home
     } catch (err) {
       setServerMsg(err.res?.data?.error || "OTP verification failed");
     }
