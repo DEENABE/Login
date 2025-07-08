@@ -47,7 +47,11 @@ const Signup = () => {
       console.log("✅ Backend Response:", response.data);
       setFormData({ name: "", email: "", password: "", number: "" });
       navigate("/signin");
-    console.log(response.data.token);
+      if (response.data.msg) {
+        console.log("jwt token:", response.data.token);
+        localStorage.setItem("token", response.data.token);
+        
+      }
           
       alert("Registration successful! Please log in.");
     } catch (err) {
