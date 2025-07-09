@@ -37,7 +37,7 @@ const signup = async (req, res) => {
       exprie: new Date(Date.now() + 3600000), // 1 hour
     });
     // Send welcome email
-    const transporter = nodemailer.createTransport({
+    const mailOptions = nodemailer.createTransport({
       from: process.env.SENDER_EMAIL,
       subject: "Welcome to Our Service",
       text: `Hello ${name},\n\nThank you for signing up! We're excited`, 
