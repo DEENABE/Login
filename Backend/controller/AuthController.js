@@ -3,15 +3,8 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../modules/User");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
-const nodemailer = require("nodemailer");
+const transporter = require("../controller/NodeMailer");
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS,
-  },
-});
 const signup = async (req, res) => {
   const { name, email, password, number } = req.body;
   if (!name || !email || !password || !number) {
@@ -33,22 +26,30 @@ const signup = async (req, res) => {
       password: handlepassword,
       number,
     });
-    await newUser.save();
+    await newUser.save(); //Generate JWT token
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    response.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      exprie: new Date(Date.now() + 3600000), // 1 hour
+    });
+    // Send welcome email
+    const transporter = nodemailer.createTransport({
+      from: process.env.SENDER_EMAIL,
+      subject: "Welcome to Our Service",
+      text: `Hello ${name},\n\nThank you for signing up! We're excited`, 
+    
+    })
+      await transporter.sendMail(mailOptions)
+       return res.status(201).json({success:true});
   } catch (err) {
     return res
       .status(500)
       .json({ message: "Server error", success: false, details: err.message });
   }
-  //Generate JWT token
-  const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
-  response.cookie("token", token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
-    exprie: new Date(Date.now() + 3600000), // 1 hour
-  });
 };
 const signin = async (req, res) => {
   const { email, password } = req.body;
@@ -85,17 +86,16 @@ const signin = async (req, res) => {
   }
 };
 const logout = (req, res) => {
-  try{
+  try {
     res.clearCookie("token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
     });
     return res.json({ message: "Logout successful", success: true });
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(500).json({ message: "Server error", success: false });
   }
-}
+};
 
-module.exports = { signup, signin,logout };
+module.exports = { signup, signin, logout };
