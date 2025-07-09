@@ -32,6 +32,11 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },   
+    otp:{
+        type:Number,
+        required: true,
+
+    }
 
 },{collection:'Auth'});
 //Hash password before saving
