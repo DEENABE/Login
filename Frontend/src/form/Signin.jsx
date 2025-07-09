@@ -56,7 +56,7 @@ const Signin = () => {
 
     try {
       const response = await axios.post(
-        "https://login-uo0t.onrender.com/auth/verify-otp",
+        "https://login-uo0t.onrender.com/auth/verifyOtp",
         { userId, otp: formData.otp }
       );
       const { token } = response.data;
