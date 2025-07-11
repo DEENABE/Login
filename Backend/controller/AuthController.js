@@ -26,7 +26,7 @@ const signup = async (req, res) => {
       password: handlepassword,
       number,
     });
-    await newUser.save(); 
+    // await newUser.save(); 
     //Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -34,11 +34,11 @@ const signup = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
-      exprie: new Date(Date.now() + 3600000), // 1 hour
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
+      exprires: new Date(Date.now() + 3600000), // 1 hour
     });
     // Send welcome email
-    const mailOptions = nodemailer.createTransport({
+    const mailOptions = createTransport({
       from: process.env.SENDER_EMAIL,
       subject: "Welcome to Our Service",
       text: `Hello ${name},\n\nThank you for signing up! We're excited`,
