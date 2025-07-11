@@ -6,6 +6,7 @@ const bcrypt = require("bcryptjs");
 const transporter = require("../controller/NodeMailer");
 
 const signup = async (req, res) => {
+  
   const { name, email, password, number } = req.body;
   if (!name || !email || !password || !number) {
     return res
@@ -40,11 +41,10 @@ const signup = async (req, res) => {
     const mailOptions = nodemailer.createTransport({
       from: process.env.SENDER_EMAIL,
       subject: "Welcome to Our Service",
-      text: `Hello ${name},\n\nThank you for signing up! We're excited`, 
-    
-    })
-      await transporter.sendMail(mailOptions)
-       return res.status(201).json({success:true});
+      text: `Hello ${name},\n\nThank you for signing up! We're excited`,
+    });
+    await transporter.sendMail(mailOptions);
+    return res.status(201).json({ success: true });
   } catch (err) {
     return res
       .status(500)
@@ -97,5 +97,20 @@ const logout = (req, res) => {
     return res.status(500).json({ message: "Server error", success: false });
   }
 };
-
+const sendverfiyOtp = async (req, res) => {
+  try{
+    const {userId} = req.body;
+    const user = await UserModel.findById(userId);
+    if(user.isAccoutVerified) {
+      return res.status(400).json({ message: "Account already verified", success: false });
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+    user.verifyopt = otp;
+    user.isoptexpired = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+    await user.save();
+  }
+  catch (err) {
+    return res.status(500).json({ message: "Server error", success: false });
+}
+}
 module.exports = { signup, signin, logout };

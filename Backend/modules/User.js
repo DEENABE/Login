@@ -1,3 +1,4 @@
+const { verify } = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 
@@ -35,8 +36,24 @@ const userSchema = new mongoose.Schema({
     otp:{
         type:Number,
         required: true,
-
-    }
+    },
+    verifyopt: {
+        type: Boolean,
+        default: false
+    },
+    isoptexpired: {
+        type: Boolean,
+        default: false
+    },
+    isAccoutVerified: {
+        type: Boolean,
+        default: false
+    },
+    resetOtp: {
+        type: Number,
+        default: null
+    },
+    
 
 },{collection:'Auth'});
 //Hash password before saving
