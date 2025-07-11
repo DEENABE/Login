@@ -4,6 +4,7 @@ const UserModel = require("../modules/User");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const transporter = require("../controller/NodeMailer");
+const nodemailer = require("nodemailer");
 
 const signup = async (req, res) => {
   const { name, email, password, number } = req.body;
