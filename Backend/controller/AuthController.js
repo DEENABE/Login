@@ -26,7 +26,7 @@ const signup = async (req, res) => {
       password: handlepassword,
       number,
     });
-    // await newUser.save(); 
+    // await newUser.save();
     //Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -38,7 +38,7 @@ const signup = async (req, res) => {
       exprires: new Date(Date.now() + 3600000), // 1 hour
     });
     // Send welcome email
-    const mailOptions =nodemailer.createTransport({
+    const mailOptions = nodemailer.createTransport({
       from: process.env.SENDER_EMAIL,
       subject: "Welcome to Our Service",
       text: `Hello ${name},\n\nThank you for signing up! We're excited`,
@@ -46,6 +46,7 @@ const signup = async (req, res) => {
     await transporter.sendMail(mailOptions);
     return res.status(201).json({ success: true });
   } catch (err) {
+    console.log("Internal Server Error:", err);
     return res
       .status(500)
       .json({ message: "Server error", success: false, details: err.message });
@@ -85,7 +86,7 @@ const signin = async (req, res) => {
     return res.status(500).json({ message: "Server error", success: false });
   }
 };
-const logout =async (req, res) => {
+const logout = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
@@ -153,15 +154,19 @@ const verfiymail = async (req, res) => {
     return res.status(500).json({ message: "Server error", success: false });
   }
 };
-const sendResetOtp=async(req,res)=> {
-  const{email}=req.body;
-  if(!email){
-    return res.status(400).json({ message: "Email is required", success: false });
+const sendResetOtp = async (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res
+      .status(400)
+      .json({ message: "Email is required", success: false });
   }
-  try{
+  try {
     const user = await UserModel.findOne({ email });
-    if(!user){
-      return res.status(404).json({ message: "User not found", success: false });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
     const resetOtp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
     user.resetOtp = resetOtp;
@@ -174,26 +179,31 @@ const sendResetOtp=async(req,res)=> {
       text: `Your password reset OTP is ${resetOtp}. It is valid for 10 minutes.`,
     };
     await transporter.sendMail(mailOptions);
-    return res.status(200).json({ message: "OTP sent successfully", success: true });
-  }
-  catch(err){
+    return res
+      .status(200)
+      .json({ message: "OTP sent successfully", success: true });
+  } catch (err) {
     return res.status(500).json({ message: "Server error", success: false });
   }
 };
 const resetPassword = async (req, res) => {
-  const{email,resetOtp,newpassword}=req.body;
-  if(!email || !resetOtp || !newpassword){
-    return res.status(400).json({ message: "All fields are required", success: false });
+  const { email, resetOtp, newpassword } = req.body;
+  if (!email || !resetOtp || !newpassword) {
+    return res
+      .status(400)
+      .json({ message: "All fields are required", success: false });
   }
-  try{
-    const user=await UserModel.findById(email);
-    if(!user){
-      return res.status(404).json({ message: "User not found", success: false });
+  try {
+    const user = await UserModel.findById(email);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
-    if(user.resetOtp === "" || user.resetOtp !== resetOtp){
+    if (user.resetOtp === "" || user.resetOtp !== resetOtp) {
       return res.status(400).json({ message: "Invalid OTP", success: false });
     }
-    if(user.isoptexpired < Date.now()){
+    if (user.isoptexpired < Date.now()) {
       return res.status(400).json({ message: "OTP expired", success: false });
     }
     const hashedPassword = await bcrypt.hash(newpassword, 10);
@@ -201,10 +211,19 @@ const resetPassword = async (req, res) => {
     user.resetOtp = "";
     user.isoptexpired = 0;
     await user.save();
-    return res.status(200).json({ message: "Password reset successfully", success: true });
-  }
-  catch(err){
+    return res
+      .status(200)
+      .json({ message: "Password reset successfully", success: true });
+  } catch (err) {
     return res.status(500).json({ message: "Server error", success: false });
   }
-}
-module.exports = { signup, signin, logout, sendverfiyOtp, verfiymail, sendResetOtp, resetPassword };
+};
+module.exports = {
+  signup,
+  signin,
+  logout,
+  sendverfiyOtp,
+  verfiymail,
+  sendResetOtp,
+  resetPassword,
+};
