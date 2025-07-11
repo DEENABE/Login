@@ -20,17 +20,18 @@ const signup = async (req, res) => {
         .json({ message: "User already exists", success: false });
     }
     const handlepassword = await bcrypt.hash(password, 10);
-    const newUser = new UserModel.create({
+    const newUser = await UserModel.create({
       name,
       email,
       password: handlepassword,
       number,
     });
-    await newUser.save(); //Generate JWT token
+    await newUser.save(); 
+    //Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    response.cookie("token", token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
