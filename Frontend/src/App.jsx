@@ -3,8 +3,7 @@ import Signup from './form/Signup'
 import Signin from './form/Signin'
 import Home from '../Components/Home'
 import { BrowserRouter, Route,Routes } from 'react-router-dom'
-import ProtectRouter from '../protectRouter/ProtectRouter'
-import ForgotPassword from '../Password/ForgotPassword'
+
 
 const App = () => {
   return (
@@ -13,7 +12,7 @@ const App = () => {
       <Route path="/" element={<Home/>} />
       <Route path="/signup" element={<Signup/>} />
       <Route path="/signin" element={<Signin/>} />
-      <Route path="/forgotpassword" element={<ForgotPassword/>} />
+    
     </Routes>
     </BrowserRouter>
   )
