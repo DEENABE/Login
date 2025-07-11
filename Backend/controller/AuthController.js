@@ -6,7 +6,6 @@ const bcrypt = require("bcryptjs");
 const transporter = require("../controller/NodeMailer");
 
 const signup = async (req, res) => {
-  
   const { name, email, password, number } = req.body;
   if (!name || !email || !password || !number) {
     return res
@@ -85,7 +84,7 @@ const signin = async (req, res) => {
     return res.status(500).json({ message: "Server error", success: false });
   }
 };
-const logout = (req, res) => {
+const logout =async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
@@ -98,19 +97,113 @@ const logout = (req, res) => {
   }
 };
 const sendverfiyOtp = async (req, res) => {
-  try{
-    const {userId} = req.body;
+  try {
+    const { userId } = req.body;
     const user = await UserModel.findById(userId);
-    if(user.isAccoutVerified) {
-      return res.status(400).json({ message: "Account already verified", success: false });
+    if (user.isAccoutVerified) {
+      return res
+        .status(400)
+        .json({ message: "Account already verified", success: false });
     }
     const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
     user.verifyopt = otp;
     user.isoptexpired = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
     await user.save();
-  }
-  catch (err) {
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Verify Your Account",
+      text: `Your verification OTP is ${otp}. It is valid for 10 minutes.`,
+    };
+    await transporter.sendMail(mailOptions);
+  } catch (err) {
     return res.status(500).json({ message: "Server error", success: false });
+  }
+};
+const verfiymail = async (req, res) => {
+  const { userId, otp } = req.body;
+  if (!userId || !otp) {
+    return res
+      .status(400)
+      .json({ message: "User ID and OTP are required", success: false });
+  }
+  try {
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
+    }
+    if (user.verifyopt == "" || user.verifyopt !== verifyopt) {
+      return res.status(400).json({ message: "Invalid OTP", success: false });
+    }
+    if (user.isoptexpired < Date.now()) {
+      return res.status(400).json({ message: "OTP expired", success: false });
+    }
+    user.isAccoutVerified = true;
+    user.verifyopt = "";
+    user.isoptexpired = 0;
+    await user.save();
+
+    return res
+      .status(200)
+      .json({ message: "Account verified successfully", success: true });
+  } catch (err) {
+    return res.status(500).json({ message: "Server error", success: false });
+  }
+};
+const sendResetOtp=async(req,res)=> {
+  const{email}=req.body;
+  if(!email){
+    return res.status(400).json({ message: "Email is required", success: false });
+  }
+  try{
+    const user = await UserModel.findOne({ email });
+    if(!user){
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+    const resetOtp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+    user.resetOtp = resetOtp;
+    user.isoptexpired = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+    await user.save();
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Reset Your Password",
+      text: `Your password reset OTP is ${resetOtp}. It is valid for 10 minutes.`,
+    };
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ message: "OTP sent successfully", success: true });
+  }
+  catch(err){
+    return res.status(500).json({ message: "Server error", success: false });
+  }
+};
+const resetPassword = async (req, res) => {
+  const{email,resetOtp,newpassword}=req.body;
+  if(!email || !resetOtp || !newpassword){
+    return res.status(400).json({ message: "All fields are required", success: false });
+  }
+  try{
+    const user=await UserModel.findById(email);
+    if(!user){
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+    if(user.resetOtp === "" || user.resetOtp !== resetOtp){
+      return res.status(400).json({ message: "Invalid OTP", success: false });
+    }
+    if(user.isoptexpired < Date.now()){
+      return res.status(400).json({ message: "OTP expired", success: false });
+    }
+    const hashedPassword = await bcrypt.hash(newpassword, 10);
+    user.password = hashedPassword;
+    user.resetOtp = "";
+    user.isoptexpired = 0;
+    await user.save();
+    return res.status(200).json({ message: "Password reset successfully", success: true });
+  }
+  catch(err){
+    return res.status(500).json({ message: "Server error", success: false });
+  }
 }
-}
-module.exports = { signup, signin, logout };
+module.exports = { signup, signin, logout, sendverfiyOtp, verfiymail, sendResetOtp, resetPassword };

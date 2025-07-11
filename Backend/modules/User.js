@@ -43,7 +43,7 @@ const userSchema = new mongoose.Schema({
     },
     isoptexpired: {
         type: Boolean,
-        default: false
+        default: false,
     },
     isAccoutVerified: {
         type: Boolean,

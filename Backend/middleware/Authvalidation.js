@@ -1,4 +1,23 @@
 const joi = require("joi");
+const jwt = require("jsonwebtoken");
+
+const verifyToken = (req, res, next) => {
+  const token=req.cookies
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try{
+    const tokendecoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!tokendecoded.id) {
+      req.body.userId = tokendecoded.id;
+    }else {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+  }
+  catch (error) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+}
 
 const signupValidation = (req, res, next) => {
   const schema = joi.object({
@@ -26,4 +45,4 @@ const siginValidation = (req, res, next) => {
 };
 
 
-module.exports = { signupValidation, siginValidation };
+module.exports = { signupValidation, siginValidation, verifyToken };
