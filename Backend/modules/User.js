@@ -1,3 +1,4 @@
+const { required } = require('joi');
 const { verify } = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
@@ -35,7 +36,9 @@ const userSchema = new mongoose.Schema({
     },   
     otp:{
         type:Number,
-        default: ""
+        default: "",
+        required: false
+        
     },
     verifyopt: {
         type: Boolean,

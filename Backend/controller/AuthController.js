@@ -27,7 +27,7 @@ const signup = async (req, res) => {
       password: handlepassword,
       number,
     });
-    // await newUser.save();
+    await newUser.save();
     //Generate JWT token
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
@@ -56,7 +56,7 @@ const signup = async (req, res) => {
 };
 const signin = async (req, res) => {
   const { email, password } = req.body;
-  if (email || password) {
+  if (!email || !password) {
     return res
       .status(400)
       .json({ message: "Email and password are required", success: false });
@@ -74,10 +74,10 @@ const signin = async (req, res) => {
         .status(401)
         .json({ message: "Invalid password", success: false });
     }
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
     });
-    response.cookie("token", token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
@@ -196,13 +196,13 @@ const resetPassword = async (req, res) => {
       .json({ message: "All fields are required", success: false });
   }
   try {
-    const user = await UserModel.findOne(email);
+    const user = await UserModel.findOne({email});
     if (!user) {
       return res
         .status(404)
         .json({ message: "User not found", success: false });
     }
-    if (user.resetOtp === "" || user.resetOtp !== resetOtp) {
+    if (!user.resetOtp || user.resetOtp != resetOtp) {
       return res.status(400).json({ message: "Invalid OTP", success: false });
     }
     if (user.isoptexpired < Date.now()) {
