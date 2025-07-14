@@ -12,6 +12,7 @@ connectDB();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.json());
 const allowedOrigins = [
   'http://localhost:5173',
   'https://login-chi-sand.vercel.app'  //  Vercel frontend
