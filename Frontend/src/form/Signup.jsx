@@ -10,7 +10,7 @@ const Signup = () => {
     email: "",
     password: "",
   });
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -38,11 +38,11 @@ const Signup = () => {
           formData
         );
         console.log("Signup successful:", response.data);
-        Navigate("/signin");
+        navigate("/signin");
       } catch (error) {
         console.log("Intenal Server Error:", error);
 
-        return status(500).json({ message: "Server Error" });
+        return alert("Signup failed: " + error.response.data.message);
       }
     };
 
