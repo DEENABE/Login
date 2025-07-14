@@ -4,7 +4,7 @@ const UserModel = require("../modules/User");
 require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const transporter = require("../controller/NodeMailer.js");
-const nodemailer = require("nodemailer");
+
 
 const signup = async (req, res) => {
   const { name, email, password, number } = req.body;
@@ -41,7 +41,7 @@ const signup = async (req, res) => {
     // Send welcome email
     const mailOptions ={
       from: process.env.SENDER_EMAIL,
-      to: user.email,
+      to: newUser.email,
       subject: "Welcome to Our Service",
       text: `Hello ${name},\n\nThank you for signing up! We're excited`,
     };
