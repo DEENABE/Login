@@ -36,14 +36,15 @@ const signup = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
-      exprires: new Date(Date.now() + 3600000), // 1 hour
+      expires: new Date(Date.now() + 3600000), // 1 hour
     });
     // Send welcome email
-    const mailOptions = nodemailer.createTransport({
+    const mailOptions ={
       from: process.env.SENDER_EMAIL,
+      to: email,
       subject: "Welcome to Our Service",
       text: `Hello ${name},\n\nThank you for signing up! We're excited`,
-    });
+    };
     await transporter.sendMail(mailOptions);
     return res.status(201).json({ success: true });
   } catch (err) {
@@ -137,7 +138,7 @@ const verfiymail = async (req, res) => {
         .status(404)
         .json({ message: "User not found", success: false });
     }
-    if (user.verifyopt == "" || user.verifyopt !== verifyopt) {
+    if (user.verifyopt == "" || user.verifyopt !== otp) {
       return res.status(400).json({ message: "Invalid OTP", success: false });
     }
     if (user.isoptexpired < Date.now()) {
@@ -195,7 +196,7 @@ const resetPassword = async (req, res) => {
       .json({ message: "All fields are required", success: false });
   }
   try {
-    const user = await UserModel.findById(email);
+    const user = await UserModel.findOne(email);
     if (!user) {
       return res
         .status(404)
