@@ -13,7 +13,7 @@ const signup = async (req, res) => {
       .status(400)
       .json({ message: "All fields are required", success: false });
   }
-  try {
+  
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res
@@ -45,9 +45,22 @@ const signup = async (req, res) => {
       subject: "Welcome to Our Service",
       text: `Hello ${name},\n\nThank you for signing up! We're excited`,
     };
+   
+  try{
     await transporter.sendMail(mailOptions);
-    return res.status(201).json({ success: true });
-  } catch (err) {
+    return res.status(201).json({
+      message: "Signup successful",
+      success: true,
+      token,
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        number: newUser.number,
+      },
+    });
+  }
+  catch (err) {
     console.log("Internal Server Error:", err);
     return res
       .status(500)
