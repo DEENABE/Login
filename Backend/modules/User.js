@@ -36,7 +36,6 @@ const userSchema = new mongoose.Schema({
     },   
     otp:{
         type:Number,
-        default: "",
         required: false
         
     },
