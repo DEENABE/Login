@@ -5,7 +5,6 @@ require("dotenv").config();
 const bcrypt = require("bcryptjs");
 const transporter = require("../controller/NodeMailer.js");
 
-
 const signup = async (req, res) => {
   const { name, email, password, number } = req.body;
   if (!name || !email || !password || !number) {
@@ -13,7 +12,7 @@ const signup = async (req, res) => {
       .status(400)
       .json({ message: "All fields are required", success: false });
   }
-  
+  try {
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return res
@@ -38,29 +37,7 @@ const signup = async (req, res) => {
       sameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
       expires: new Date(Date.now() + 3600000), // 1 hour
     });
-    // Send welcome email
-    const mailOptions ={
-      from: process.env.SENDER_EMAIL,
-      to: newUser.email,
-      subject: "Welcome to Our Service",
-      text: `Hello ${name},\n\nThank you for signing up! We're excited`,
-    };
-   
-  try{
-    await transporter.sendMail(mailOptions);
-    return res.status(201).json({
-      message: "Signup successful",
-      success: true,
-      token,
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email,
-        number: newUser.number,
-      },
-    });
-  }
-  catch (err) {
+  } catch (err) {
     console.log("Internal Server Error:", err);
     return res
       .status(500)
@@ -96,6 +73,18 @@ const signin = async (req, res) => {
       SameSite: process.env.NODE_ENV === "production" ? "None" : "strict",
       exprie: new Date(Date.now() + 3600000), // 1 hour
     });
+    //opt verification
+    const otp = Math.floor(100000 + Math.random() * 900000); // Generate a 6-digit OTP
+    user.otp = otp;
+    user.isoptexpired = Date.now() + 10 * 60 * 1000; // OTP valid for 10 minutes
+    // await user.save();
+    const mailOptions = {
+      from: process.env.SENDER_EMAIL,
+      to: user.email,
+      subject: "Login OTP",
+      text: `Your login OTP is ${otp}. It is valid for 10 minutes.`,
+    };
+    await transporter.sendMail(mailOptions);
     return res.json({ message: "Signin successful", success: true, token });
   } catch (err) {
     return res.status(500).json({ message: "Server error", success: false });
@@ -209,7 +198,7 @@ const resetPassword = async (req, res) => {
       .json({ message: "All fields are required", success: false });
   }
   try {
-    const user = await UserModel.findOne({email});
+    const user = await UserModel.findOne({ email });
     if (!user) {
       return res
         .status(404)
