@@ -39,22 +39,7 @@ const userSchema = new mongoose.Schema({
         required: false
         
     },
-    verifyopt: {
-        type: Boolean,
-        default: false
-    },
-    isoptexpired: {
-        type: Boolean,
-        default: false,
-    },
-    isAccoutVerified: {
-        type: Boolean,
-        default: false
-    },
-    resetOtp: {
-        type: Number,
-        default: null
-    },
+    
     
 
 },{collection:'Auth'});

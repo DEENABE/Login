@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, {  } from "react";
 import { Box, Container, Typography, Button, Grid, Paper} from "@mui/material";
 import gym1 from "../images/gym1.jpg";
 import { Link,useNavigate } from "react-router-dom";
@@ -22,7 +22,7 @@ const Home = () => {
  <div className="relative w-full h-full">
       {/* 🔴 Top Bar */}
       <div>
-        <img src={fitlogo} alt="Fitness Logo" className="w-15 h-20 absolute top-4 -ml-2 rounded-2xl pb-10 " onClick={handlereload} />
+        <img src={fitlogo} alt="Fitness Logo" className="w-1 h-20 absolute top-4 -ml-2 rounded-2xl pb-10 " onClick={handlereload} />
       </div>
       <div className="bg-gray-800 text-red-500 flex justify-between md:text-4xl p-4 text-5xl font-bold ">
         <div className="pl-10">MyFitness</div>

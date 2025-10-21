@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import signupimage from "/images/signupimage.jpg"; // Ensure path is correct
@@ -10,6 +10,12 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  useEffect(()=>{
+    
+    console.log("user input");
+    
+  },[formData])
+
   const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
