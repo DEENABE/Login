@@ -6,13 +6,13 @@ const router=require('express').Router();//using express router
 
 //routing to signup and signin
 router.post('/signup',signupValidation,signup);
-router.post('/signin',siginValidation,signin);
-router.post('/logout',logout);
-router.post('./sendverfiyOtp',sendverfiyOtp);
-router.post('./verfiymail',verfiymail)
-router.post('./verifyToken',verifyToken)
-router.post('./resetPassword',resetPassword);
-router.post('./sendResetOtp',sendResetOtp);
+// router.post('/signin',siginValidation,signin);
+// router.post('/logout',logout);
+// router.post('./sendverfiyOtp',sendverfiyOtp);
+// router.post('./verfiymail',verfiymail)
+// router.post('./verifyToken',verifyToken)
+// router.post('./resetPassword',resetPassword);
+// router.post('./sendResetOtp',sendResetOtp);
 //user get
 
 module.exports=router; //exporting router
