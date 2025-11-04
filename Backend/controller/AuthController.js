@@ -30,7 +30,7 @@ const signup=async(req,res)=>{
     res.cookie('token', token, { httpOnly: true, secure: true });
     //verify email 
     const mailOptions={
-      from:process.env.SMTP_USER,
+      from:process.env.SMTP_HOST,
       to:newUser.email,
       subject:"Welcome to Our Service",
       text:`Hello ${newUser.name},\n\nThank you for signing up! We're excited to have you on board.\n\nBest regards,\nYour Team`
