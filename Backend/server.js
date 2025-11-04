@@ -30,9 +30,7 @@ app.use(cors({
   },
   credentials: true,
 }));
-app.get('/',(res,req)=>{
-  res.send("Welcome to login API")
-})
+
 //routing to authRouter
 app.use('/auth',authRouter)
 
