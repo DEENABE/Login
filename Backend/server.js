@@ -15,7 +15,9 @@ app.use(bodyParser.json());
 app.use(express.json());
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://login-chi-sand.vercel.app'  //  Vercel frontend
+  'https://login-chi-sand.vercel.app', //  Vercel frontend
+  'https://login-uo0t.onrender.com' //Render backend
+   
 ];
 
 app.use(cors({
