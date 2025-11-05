@@ -43,5 +43,12 @@ const signup = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", success: false });
   }
 };
+const signin=async(res,req)=>{
+  const{email,password}=req.body;
+  if(!email|!password){
+return res.status(404).json("UserName or Password incorrect")
+  }
 
-module.exports = { signup };
+  
+}
+module.exports = { signup,signin };
