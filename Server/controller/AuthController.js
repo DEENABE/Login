@@ -31,7 +31,7 @@ const signup = async (req, res) => {
     res.cookie("token", token, { httpOnly: true, secure: true });
     //verify email
     const mailOptions = {
-      from: process.env.SENDER_MAIL,
+      from: process.env.SMTP_HOST,
       to: newUser.email,
       subject: "Welcome to Our Service",
       text: `Hello ${newUser.name},\n\nThank you for signing up! We're excited to have you on board.\n\nBest regards,\nYour Team`,
@@ -43,12 +43,15 @@ const signup = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", success: false });
   }
 };
-const signin=async(res,req)=>{
-  const{email,password}=req.body;
-  if(!email|!password){
-return res.status(404).json("UserName or Password incorrect")
-  }
+// const signin=async(res,req)=>{
+//   const{email,password}=req.body;
+//   if(!email|!password){
+// return res.status(400).json("All feilds are requried")
+//   }
+//   const user= await usermodel.findOne({email})
+//   user()
+
 
   
-}
+// }
 module.exports = { signup,signin };
