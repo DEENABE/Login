@@ -12,7 +12,7 @@ const Signup = () => {
   });
   useEffect(()=>{
     
-    console.log("user input");
+    // console.log("user input");
     
   },[formData])
 
