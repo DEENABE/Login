@@ -43,15 +43,31 @@ const signup = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error", success: false });
   }
 };
-// const signin=async(res,req)=>{
-//   const{email,password}=req.body;
-//   if(!email|!password){
-// return res.status(400).json("All feilds are requried")
-//   }
-//   const user= await usermodel.findOne({email})
-//   user()
-
-
+const signin = async (req, res) => {
+  try{
+    const{email,password}=req.body;
+    if(!email|!password){
+      return res.status(404).json({message:"Invalid Email and Password"})
+    }
+    const existinUser=await usermodel.findOne({email})
+    if(!existinUser){
+      return res.status(550).json({message:"Invaild Email"})
+    }
+    const hashedPassword=await bcrypt.compare(password,user.password)
+    if(!hashedPassword){
+      return res.status(401).json({message:"Invaild Password"})
+    }
+    const token=jwt.sign({userID:user._id},process.env.JWT_SECRET,{
+      expiresIn:"30m"
+    })
+    return res.status(200).json({message:"User Logged Successfully",token,user:{
+      name:user.name,
+      mail:user.email,
+    }})
+  }
+  catch(err){
+    return res.status(500).json("Internal Server Error")
+  }
+}
   
-// }
-module.exports = { signup,signin };
+module.exports = { signup, signin };
