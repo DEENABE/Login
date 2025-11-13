@@ -13,7 +13,7 @@ const signup = async (req, res) => {
   try {
     const existinUser = await usermodel.findOne({ email });
     if (existinUser) {
-      return res.status(400).json({ error: "User already exists" });
+      return res.status(409).json({ error: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new usermodel({
