@@ -23,7 +23,7 @@ const signup = async (req, res) => {
       password: hashedPassword,
     });
     await newUser.save();
-    res.status(201).json({ success: true });
+    // res.status(201).json({ success: true });
     //JWT token generation
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: "1h",
